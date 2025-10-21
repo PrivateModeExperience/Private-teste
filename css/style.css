@@ -1,0 +1,1079 @@
+/* === FONTE MIEDINGER TYPE BOLD === */
+@font-face {
+  font-family: "private";
+  src: url("../assests/fonts/miedinger-bold.ttf")
+}
+
+@font-face {
+  font-family: "rodapé";
+  src: url("../assests/fonts/Fontspring-DEMO-breulgroteska-bold.ttf");
+}
+
+/* Registrar a fonte .otf pedida pelo usuário */
+@font-face {
+  font-family: 'breulgroteska';
+  src: url('../assests/fonts/Fontspring-DEMO-breulgroteska-bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* === RESET BÁSICO === */
+* {
+  font-family: 'private', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* === BASE === */
+/* Vídeo de fundo e overlay */
+/*
+  Como usar:
+  - Altere o caminho do vídeo no HTML: <source data-src="./assets/videos/fundo.mp4">
+  - Para mudar a opacidade da overlay, ajuste a variável --video-overlay-alpha abaixo.
+  - Para forçar cores dos textos, veja as regras .hero *, .gallery (já configuradas).
+*/
+
+/* variável para controlar a opacidade da camada escura sobre o vídeo */
+:root {
+  /* overlay branca translúcida para texto preto legível */
+  --video-overlay-alpha: 0.22;
+  /* 0 = transparente, 1 = totalmente opaco */
+  --text-on-video: #000000;
+  /* cor padrão dos textos sobre o vídeo (preto) */
+}
+
+
+/* Vídeo global: ocupa toda a tela e fica atrás do conteúdo */
+#bg-video {
+  position: fixed;
+  inset: 0;
+  /* top:0; right:0; bottom:0; left:0 */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+  /* atrás do overlay e do conteúdo */
+}
+
+/* Overlay escura sobre o vídeo. Ajuste --video-overlay-alpha para alterar força */
+.video-overlay {
+  position: fixed;
+  inset: 0;
+  /* usar camada branca translúcida para garantir legibilidade de texto preto */
+  background: rgb(255 255 255 / var(--video-overlay-alpha));
+  z-index: -1;
+  /* overlay entre vídeo (-2) e conteúdo */
+  pointer-events: none;
+  /* garante que não bloqueie interações */
+}
+
+/* Helper: caso precise de uma overlay mais escura dinamicamente */
+.video-overlay.dark {
+  background: rgb(255 255 255 / calc(var(--video-overlay-alpha) + 0.15));
+}
+
+.content-overlay {
+  position: relative;
+  z-index: 2;
+  /* não forçar cor global aqui; aplicar branco somente ao hero abaixo */
+}
+
+/* Mantém o hero com textos brancos */
+.hero * {
+  /* herda a cor definida em :root; facilita alternar tema */
+  color: var(--text-on-video) !important;
+}
+
+/* Tornar o hero um contexto posicionável para o vídeo de fundo local */
+.hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 50vh;
+  /* garante que o hero ocupe boa parte da viewport */
+  padding-top: 40px;
+  /* reduzir espaço acima do conteúdo */
+}
+
+/* Vídeo específico do hero (cobrindo apenas a altura do hero) */
+.hero .hero-bg {
+  position: absolute;
+  inset: 0;
+  /* top:0; left:0; right:0; bottom:0 */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+  /* fica atrás do overlay e do conteúdo do hero */
+}
+
+/* Overlay limitada ao hero (fica acima do vídeo e atrás do conteúdo) */
+.hero .video-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  /* overlay entre vídeo (-2) e conteúdo (0/1) */
+}
+
+/* Regra específica para forçar o comportamento do #bg-video quando ele está dentro do .hero
+   Essa regra é propositalmente mais específica (usa o id dentro do .hero) e aparece depois
+   para sobrescrever a declaração global #bg-video definida no topo do arquivo. */
+.hero #bg-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+  /* atrás do conteúdo do hero, acima do fundo da página */
+}
+
+/* Garante que containers dentro da overlay fiquem acima da camada */
+.content-overlay .container {
+  position: relative;
+  z-index: 3;
+}
+
+body {
+  font-family: 'private', sans-serif;
+  /* mantemos o vídeo como fundo; body em si transparente */
+  background: transparent;
+  color: var(--text-on-video);
+  line-height: 1.5;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* === TÍTULOS === */
+h1,
+h2,
+h3 {
+  font-family: 'private', sans-serif;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* === LAYOUT BASE === */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* FOOTER DINÂMICO */
+.footer-dynamic {
+  padding: 80px 0 40px;
+  color: var(--text-on-video);
+  font-family: 'breulgroteska', 'rodapé', sans-serif;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-left .footer-cta {
+  font-size: 16px;
+  max-width: 380px;
+  color: rgba(0, 0, 0, 0.9);
+}
+
+.footer-right .muted {
+  color: rgba(0, 0, 0, 0.45);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.footer-right .footer-list {
+  padding-left: 0;
+}
+
+.footer-right .footer-list li {
+  color: rgba(0, 0, 0, 0.9);
+}
+
+.private-btn {
+  width: 200px;
+}
+
+.footer-toggle {
+  background: transparent;
+  border: none;
+  text-align: left;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 6px 0;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 14px;
+}
+
+.footer-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.28s ease;
+}
+
+.footer-list.open {
+  max-height: 500px;
+  /* suficiente para mostrar itens */
+}
+
+.footer-list li {
+  padding: 6px 0;
+  font-size: 15px;
+}
+
+.footer-list a {
+  color: var(--text-on-video);
+  text-decoration: none;
+}
+
+.footer-list a:hover,
+.footer-list a:focus {
+  text-decoration: underline;
+  outline: none;
+}
+
+.footer-bottom {
+  margin-top: 28px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  padding-top: 18px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: rgba(0, 0, 0, 0.7);
+  align-items: center;
+}
+
+.footer-bottom-left .footer-small {
+  font-family: 'private', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+.footer-bottom-right .copyright-note {
+  font-family: 'private', sans-serif;
+  text-transform: uppercase;
+  font-size: 14px;
+  line-height: 1.4;
+  color: rgba(0, 0, 0, 0.85);
+  text-align: right;
+}
+
+@media (max-width: 900px) {
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer-bottom-right .copyright-note {
+    text-align: left;
+  }
+}
+
+.copyright-note {
+  font-size: 13px;
+  opacity: 0.9;
+  max-width: 800px;
+}
+
+@media (min-width: 900px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+
+  .footer-list {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .footer-list.open {
+    max-height: none;
+  }
+
+  .footer-toggle {
+    cursor: default;
+  }
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* === HEADER / NAVBAR === */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+.navbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  position: relative;
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ticket-btn {
+  z-index: 1;
+}
+
+.navbar.shrink {
+  background: rgba(0, 0, 0, 0.95);
+  padding: 8px 0;
+}
+
+.navbar .logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+/* Sticky logo: aplicado via JS quando o usuário rola além da posição original */
+.logo-sticky {
+  position: fixed !important;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  transition: transform 0.18s ease, top 0.18s ease;
+}
+
+/* Placeholder to avoid layout jump when logo becomes fixed */
+.logo-placeholder {
+  display: block;
+  width: 100%;
+  height: 0;
+  /* will be set dynamically */
+}
+
+.navbar.shrink .logo {
+  height: 35px;
+}
+
+.menu a:hover {
+  color: #ff0066;
+}
+
+
+/* === BOTÕES === */
+.btn,
+.btn-outline {
+  display: inline-block;
+  padding: 10px 22px;
+  border-radius: 30px;
+  font-size: 14px;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.btn {
+  font-family: 'private', sans-serif;
+  background: #fff;
+  color: #000;
+  font-weight: 600;
+}
+
+.btn:hover {
+  background: #f1f1f1;
+}
+
+/* Botões específicos do hero: fundo preto e texto branco (não altera outros botões) */
+.hero .btn {
+  background: #000 !important;
+  color: #fff !important;
+  border-color: transparent;
+}
+
+.hero .btn:hover,
+.hero .btn:focus {
+  background: #111 !important;
+  color: #fff !important;
+  outline: none;
+}
+
+.btn-outline {
+  border: 1px solid #fff;
+  color: #fff;
+}
+
+.btn-outline:hover {
+  background: #fff;
+  color: #000;
+}
+
+/* Estilo do botão Private (círculo + texto) */
+.private-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  color: #000;
+  border-radius: 50px;
+  padding: 10px 15px;
+  text-decoration: none;
+  font-family: 'private', sans-serif;
+  font-weight: bold;
+  width: 220px;
+  height: 45px;
+  transition: 0.3s;
+}
+
+.private-btn .text-left {
+  font-size: 20px;
+  letter-spacing: 1px;
+  padding-left: 10px;
+}
+
+.private-btn .circle {
+  background-color: #eaeaea;
+  border-radius: 50%;
+  padding: 10px 18px;
+  font-size: 13px;
+  text-transform: uppercase;
+  transition: 0.3s;
+}
+
+.private-btn:hover {
+  transform: scale(1.05);
+}
+
+.private-btn:hover .circle {
+  background-color: #000;
+  color: #fff;
+}
+
+/* === HERO === */
+.hero {
+  padding-top: 120px;
+  padding-bottom: 80px;
+  background: transparent;
+  /* mostra o vídeo por trás */
+  position: relative;
+}
+
+.hero-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+  align-items: center;
+}
+
+.hero h1 {
+  font-size: 46px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.hero p {
+  margin-bottom: 25px;
+  font-size: 16px;
+  color: #ccc;
+}
+
+.hero-img img {
+  width: 100%;
+  border-radius: 20px;
+  object-fit: cover;
+}
+
+/* === EVENTS === */
+.events {
+  padding: 80px 0;
+  background: transparent;
+}
+
+.events h2 {
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 30px;
+}
+
+.events .grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 20px rgba(255, 0, 120, 0.2);
+}
+
+.card img {
+  width: 100%;
+  height: auto;
+  max-height: 420px;
+  object-fit: cover;
+}
+
+.card h3 {
+  margin: 15px;
+  font-size: 18px;
+}
+
+.card p {
+  margin: 0 15px 10px;
+  font-size: 14px;
+  color: #000000;
+}
+
+/* === GALLERY === */
+.gallery {
+  padding: 80px 0;
+  background: transparent;
+}
+
+.gallery h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 28px;
+}
+
+.gallery .grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+}
+
+.gallery .card {
+  background: rgba(255, 255, 255, 0.95);
+  /* fundo claro */
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery .card img {
+  width: 100%;
+  height: auto;
+  max-height: 380px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.gallery .card:hover img {
+  transform: scale(1.03);
+}
+
+/* Força textos dentro da galeria em preto para legibilidade contra fundo claro */
+.gallery,
+.gallery .card,
+.gallery h2,
+.gallery p,
+.gallery a {
+  color: #111 !important;
+}
+
+/* === CONTACT === */
+.contact {
+  padding: 80px 0;
+}
+
+.contact .grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.contact h2 {
+  margin-bottom: 10px;
+}
+
+.contact p {
+  color: #ccc;
+  margin-bottom: 8px;
+}
+
+.contact form {
+  display: grid;
+  gap: 10px;
+}
+
+.contact input,
+.contact textarea {
+  font-family: 'private', sans-serif;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #555;
+  background: transparent;
+  color: inherit;
+  resize: none;
+}
+
+.contact input:focus,
+.contact textarea:focus {
+  outline: none;
+  border-color: #ff0099;
+}
+
+/* === FOOTER === */
+.footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 25px 0;
+  text-align: center;
+  background: transparent;
+}
+
+.footer nav {
+  margin-top: 8px;
+}
+
+.footer nav a {
+  margin: 0 10px;
+  color: #aaa;
+  font-size: 14px;
+  transition: color 0.3s;
+}
+
+.footer nav a:hover {
+  color: #ff0099;
+}
+
+/* === TOGGLE DE TEMA === */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  inset: 0;
+  background-color: #bbb;
+  border-radius: 34px;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6px;
+  font-size: 12px;
+}
+
+.icon-light,
+.icon-dark {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.icon-light {
+  color: #fff;
+}
+
+.icon-dark {
+  color: #ff0000;
+}
+
+input:checked+.slider {
+  background-color: #8b5cf6;
+}
+
+input:checked+.slider .icon-dark {
+  opacity: 1;
+}
+
+input:not(:checked)+.slider .icon-light {
+  opacity: 1;
+}
+
+.slider:before {
+  content: "";
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+input:checked+.slider:before {
+  transform: translateX(24px);
+}
+
+/* === RESPONSIVIDADE === */
+@media (max-width: 900px) {
+  .hero-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .hero-img {
+    margin-top: 25px;
+  }
+}
+
+@media (max-width: 700px) {
+  .menu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .contact .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .footer nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+
+
+
+/* === HERO === */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100vh;
+  width: 100%;
+  background: transparent;
+  /* transparente para deixar o vídeo aparecer atrás */
+  position: relative;
+}
+
+.hero-text h1 {
+  font-family: "Miedinger Type Bold", sans-serif;
+  font-size: 5rem;
+  text-transform: uppercase;
+  color: var(--text-on-video);
+  text-align: center;
+  letter-spacing: 0.05em;
+  margin: 0;
+  line-height: 1;
+  display: inline-block;
+}
+
+
+.hero-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  padding: 0 20px;
+  max-width: 2000px;
+}
+
+.hero-center h1 {
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.hero-center p {
+  font-size: 0.9rem;
+  color: #ccc;
+  max-width: 600px;
+}
+
+.hero-center .buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Cursor piscando */
+
+#typewriter {
+  font-family: 'private', sans-serif;
+  font-size: clamp(2rem, 7vw, 5rem);
+
+  font-weight: 800;
+  color: #fff;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 auto;
+  display: block;
+
+}
+
+#typewriter::after {
+  content: "|";
+  margin-left: 5px;
+  animation: blink 0.8s infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.menu a,
+.btn,
+.footer,
+.hero p,
+.contact input,
+.contact textarea {
+  font-family: 'private', sans-serif;
+}
+
+.centro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+#typewriter {
+  font-family: 'private', sans-serif;
+  font-size: 3vw;
+  /* Tamanho relativo à largura da tela */
+  white-space: nowrap;
+  /* Evita quebra de linha */
+  overflow: hidden;
+  /* Esconde qualquer texto que ultrapasse */
+  text-overflow: ellipsis;
+  /* Adiciona "..." se necessário */
+  max-width: 100%;
+  /* Garante que não ultrapasse a largura do container */
+  box-sizing: border-box;
+}
+
+.container {
+  width: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+
+.descricao {
+  font-size: 18px;
+  max-width: 600px;
+  margin-bottom: 30px;
+}
+
+.botoes {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Responsivo para telas menores */
+@media (max-width: 505px) {
+  #typewriter {
+    font-size: 4vw;
+    /* Ajusta para telas menores */
+  }
+
+  .descricao {
+    font-size: 30px;
+    padding: 0 10px;
+  }
+
+  .botoes {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+.slider-indicators {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.dot {
+  height: 12px;
+  width: 12px;
+  margin: 0 5px;
+  background-color: #000000;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.dot.active {
+  background-color: #000000;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 200;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  text-align: center;
+  padding-top: 60px;
+}
+
+.modal-img {
+  max-width: 80%;
+  max-height: 80%;
+  border-radius: 10px;
+  animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 40px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 40px;
+  color: #fff;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.nav.prev {
+  left: 20px;
+}
+
+.nav.next {
+  right: 20px;
+}
+
+#caption {
+  color: #ccc;
+  margin-top: 15px;
+  font-size: 16px;
+}
+
+/* Esconde setas em telas pequenas */
+@media (max-width: 300px) {
+  #logo-navbar {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    max-width: 100px;
+    /* ajuste conforme o tamanho da logo */
+    position: relative;
+  }
+
+  .navbar .container {
+    justify-content: center;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.nav.prev {
+  left: 10px;
+  display: none;
+}
+
+/* Esconde setas em telas pequenas */
+@media (max-width: 300px) {
+  #logo-navbar {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    max-width: 100px;
+    /* ajuste conforme o tamanho da logo */
+    position: relative;
+  }
+
+  .navbar .container {
+    justify-content: center;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+  }
+
+  .nav.prev {
+    left: 10px;
+    display: none;
+  }
+
+  .nav.next {
+    right: 10px;
+    display: none;
+  }
+}
